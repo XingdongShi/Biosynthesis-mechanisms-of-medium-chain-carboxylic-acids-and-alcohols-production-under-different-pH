@@ -4,6 +4,14 @@ This repository contains a collection of code, scripts and supporting informatio
 
 The supporting information includes some additional calculation procedures and tables.
 
+The MS file is here - ([Supplementary Information.docx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Information.docx))
+
+                    - ([Supplementary Dataset.xlsx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx))
+                    
+The markdown file is here - ([Supplementary Information.md](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supporting%20information.md))
+
+                          - ([Supplementary Dataset.md](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.md))
+                    
 ## Table of content
 * [Supporting information and dataset](#supporting-information-and-dataset)
  + [Supporting Texst S1 to S2 and Table S1 to S6](#supporting-texst-s1-to-s2-and-table-s1-to-s6)
@@ -36,10 +44,6 @@ The supporting information includes some additional calculation procedures and t
 
 You can download these MS files or see the markdown notes below.
 ### Supporting Texst S1 to S2 and Table S1 to S6
-The MS file is here - ([Supplementary Information.docx](https://github.com/a2962009/Biosynthesis-mechanisms-of-MCCA-and-alcohols-under-different-pH/blob/main/Supplementary%20Information.docx))
-
-The markdown file is here - ([Supplementary Information.md](https://github.com/a2962009/Biosynthesis-mechanisms-of-MCCA-and-alcohols-under-different-pH/blob/main/Supporting%20information.md))
-
 #### Text S1 The calculation procedures
 The final concentration of main products, including SCCAs, MCCAs and alcohols, was converted into COD concentration. The relationship between products and COD is listed in the table below.
 |Products|COD value (g-COD/g)|Electron equivalent (mol _e_<sup>-</sup>/mol)|
