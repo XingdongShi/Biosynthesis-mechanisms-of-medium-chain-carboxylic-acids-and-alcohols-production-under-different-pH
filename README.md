@@ -4,6 +4,33 @@ This repository contains a collection of code, scripts and supporting informatio
 
 The supporting information includes some additional calculation procedures and tables.
 
+## Table of content
+* [Supporting information and dataset](#supporting-information-and-dataset)
+ + [Supporting Texst S1 to S2 and Table S1 to S6](#supporting-texst-s1-to-s2-and-table-s1-to-s6)
+    - [Text S1 The calculation procedures](#text-s1-the-calculation-procedures)
+    - [Text S2 The calculation of undissociated MCCA concentrations in E5 and E7 groups](#text-s2-the-calculation-of-undissociated-mcca-concentrations-in-e5-and-e7-groups)
+    - [Table S1 The average concentration (mg-COD/L) of main products and their selectivity (electron/ carbon)](#table-s1-the-average-concentration-of-main-products-and-their-selectivity)
+    - [Table S2 The specificities of primary products (on a COD basis) for each group](#table-s2-the-specificities-of-primary-products-for-each-group)
+    - [Table S3 The selectivity of each compound at pH 5 based on the electron and carbon](#table-s3-the-selectivity-of-each-compound-at-ph-5-based-on-the-electron-and-carbon)
+    - [Table S4 The selectivity of each compound at pH 7 based on the electron and carbon](#table-s4-the-selectivity-of-each-compound-at-ph-7-based-on-the-electron-and-carbon)
+    - [Table S5 The selectivity of each compound at pH 10 based on the electron and carbon](#table-s5-the-selectivity-of-each-compound-at-ph-10-based-on-the-electron-and-carbon)
+    - [Table S6 The overall details of metagenomic assembly results](#table-s6-the-overall-details-of-metagenomic-assembly-results)
+ + [Dataset S1 to S12](#dataset-s1-to-s12)
+    - [Dataset S1 The exact Fisher's test results between E5 and E10](#dataset-s1-the-exact-fisher-test-results-between-e5-and-e10)
+    - [Dataset S2 The exact Fisher's test results between C7 and E7](#dataset-s2-the-exact-fisher-test-results-between-c7-and-e7)
+    - [Dataset S3 The exact Fisher's test results between E5 and E7](#dataset-s3-the-exact-fisher-test-results-between-e5-and-e7)
+    - [Dataset S4 The exact Fisher's test results between E7 and E10](#dataset-s4-the-exact-fisher-test-results-between-e7-and-e10)
+    - [Dataset S5 The exact Fisher's test results between C7 and E10](#dataset-s5-the-exact-fisher-test-results-between-c7-and-e10)
+    - [Dataset S6 The exact Fisher's test results between C7 and E5](#dataset-s6-the-exact-fisher-test-results-between-c7-and-e5)
+    - [Dataset S7 The abundance of main enzyme for producing MCCA and alcohols in each group](#dataset-s7-the-abundance-of-main-enzyme-for-producing-mcca-and-alcohols-in-each-group)
+    - [Dataset S8 The main enzyme proportion in each sample](#dataset-s8-the-main-enzyme-proportion-in-each-sample)
+    - [Dataset S9 The overall characteristics of the MAGs recovered in this study](#dataset-s9-the-overall-characteristics-of-the-mags-recovered-in-this-study)
+    - [Dataset S10 The detailed taxa of MAGs using GTDB-Tk](#dataset-s10-the-detailed-taxa-of-mags-using-gtdb-tk)
+    - [Dataset S11 The glycoside hydrolases in each MAGs](#dataset-s11-the-glycoside-hydrolases-in-each-mags)
+    - [Dataset S12 The main functional genes in each MAGs](#dataset-s12-the-main-functional-genes-in-each-mags)
+  * [Metagenome-centric analysis workflow](#metagenome-centric-analysis-workflow)
+  * [Copyright](#copyright)
+
 ## Supporting information and dataset
 The supporting information includes some additional calculation procedures and tables. Text S1-S2 and Table S1 to S6 are in the supporting information file, while Datasets S1 to S12 are in the supporting dataset file.
 
@@ -85,7 +112,7 @@ Then
 
 $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 
-#### Table S1 The average concentration (mg-COD/L) of main products and their selectivity (electron/ carbon) for the microalgae fermentation reactor during the steady stage (mean ± standard error). If a concentration was below the detection limit, then the concentration was represented as 0.
+#### Table S1 The average concentration of main products and their selectivity
 
 <table>
 <thead>
@@ -292,7 +319,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Table S2 The specificities of primary products (on a COD basis) for each group
+#### Table S2 The specificities of primary products for each group
 
 <table>
 <thead>
@@ -935,7 +962,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </table>
 
 ### Dataset S1 to S12
-#### Dataset S1 The exact Fisher's test results between E5 and E10							
+#### Dataset S1 The exact Fisher test results between E5 and E10							
 
 <table>
 <thead>
@@ -1204,7 +1231,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S2 The exact Fisher's test results between C7 and E7							
+#### Dataset S2 The exact Fisher test results between C7 and E7							
 
 <table>
 <thead>
@@ -1473,7 +1500,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S3 The exact Fisher's test results between E5 and E7							
+#### Dataset S3 The exact Fisher test results between E5 and E7							
 
 <table>
 <thead>
@@ -1742,7 +1769,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S4 The exact Fisher's test results between E7 and E10							
+#### Dataset S4 The exact Fisher test results between E7 and E10							
 
 <table>
 <thead>
@@ -2011,7 +2038,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S5 The exact Fisher's test results between C7 and E10							
+#### Dataset S5 The exact Fisher test results between C7 and E10							
 
 <table>
 <thead>
@@ -2280,7 +2307,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S6 The exact Fisher's test results between C7 and E5							
+#### Dataset S6 The exact Fisher test results between C7 and E5							
 
 <table>
 <thead>
@@ -2978,7 +3005,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S8: The main enzyme proportion in each sample
+#### Dataset S8 The main enzyme proportion in each sample
 
 <table>
 <thead>
@@ -3166,7 +3193,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S9: The overall characteristics of the MAGs recovered in this study
+#### Dataset S9 The overall characteristics of the MAGs recovered in this study
 
 <table>
 <thead>
@@ -4120,7 +4147,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Table S10 The detailed taxa of MAGs using GTDB-Tk
+#### Dataset S10 The detailed taxa of MAGs using GTDB-Tk
 
 <table>
 <thead>
@@ -4545,7 +4572,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Dataset S11: The glycoside hydrolases in each MAGs
+#### Dataset S11 The glycoside hydrolases in each MAGs
 
 #### Dataset S12 The main functional genes in each MAGs
 
