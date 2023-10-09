@@ -4581,7 +4581,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 #### Dataset S12 The main functional genes in each MAGs
 
 ## Metagenome-centric analysis workflow
-All the scripts were developed for running on the PBS Pro and tested on eResearch High Performance Computing cluster at the University of Technology Sydney.
+All the scripts were developed for running on the iHPC (interactive High-Performance Computing) facility or PBS Pro managed High Performance Computing cluster at the University of Technology Sydney.
 
 ### Run metaWRAP-Read_qc to trim the reads
 ```shell
