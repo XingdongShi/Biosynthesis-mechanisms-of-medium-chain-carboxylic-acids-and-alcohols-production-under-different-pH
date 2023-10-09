@@ -32,7 +32,7 @@ The final concentration of main products, including SCCAs, MCCAs and alcohols, w
 
 The specificities of primary products are calculated using the following equation:
 
-$$\text{Specificity of compound }i\text{ (%)}=\frac{C_{i}}{(\displaystyle\sum_{i=1}^{n} C_{i})}\times 100\%$$
+$$\text{Specificity of compound }i=\frac{C_{i}}{(\displaystyle\sum_{i=1}^{n} C_{i})}$$
 
 Where $`C_{i}`$ is the finial concentration (COD-g/L) of compound $`i`$.
 
@@ -40,9 +40,9 @@ To investigate the carbon and electron flow under different pH, the selectivity 
 
 $$\Delta C_{i}=\Delta C_{final}-\Delta C_{initial}$$
 
-$$\text{Selectivity [mol } e^- \% ]=\frac{\Delta C_{i}}{\displaystyle\sum_{i=1}^{n} \Delta C_{i}}$$
+$$\text{Selectivity [mol  e^-]=\frac{\Delta C_{i}}{\displaystyle\sum_{i=1}^{n} \Delta C_{i}}$$
 
-$$\text{Selectivity [mol C } \% ]=\frac{\Delta\gamma_{i}}{\displaystyle\sum_{i=1}^{n} \Delta\gamma_{i}}$$
+$$\text{Selectivity [mol C ]=\frac{\Delta\gamma_{i}}{\displaystyle\sum_{i=1}^{n} \Delta\gamma_{i}}$$
 
 Where $`C_{initial}`$ is the concentration of utilized compound $`i`$ (mmol _e_<sup>-</sup> /L), which is transformed from microalgae biomass, i.e., the concentration of compound $`i`$ in controls. $`C_{final}`$ is the final concentration of compound $`i`$ in the fermentation broth (mmol _e_<sup>-</sup> /L). $`\Delta C_{i}`$ is the concentration changes of compound $`i`$ (mmol _e_<sup>-</sup> /L). Similarity, $`\Delta\gamma_{i}`$ is the concentration changes of compound $`i`$ (mmol C /L).
 
