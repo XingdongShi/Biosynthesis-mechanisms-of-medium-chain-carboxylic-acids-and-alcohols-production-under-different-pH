@@ -40,7 +40,7 @@ To investigate the carbon and electron flow under different pH, the selectivity 
 
 $$\Delta C_{i}=\Delta C_{final}-\Delta C_{initial}$$
 
-$$\text{Selectivity (mol  e}^-\text{)}=\frac{\Delta C_{i}}{\displaystyle\sum_{i=1}^{n} \Delta C_{i}}$$
+$$\text{Selectivity (mol  }e^-\text{)}=\frac{\Delta C_{i}}{\displaystyle\sum_{i=1}^{n} \Delta C_{i}}$$
 
 $$\text{Selectivity (mol C )}=\frac{\Delta\gamma_{i}}{\displaystyle\sum_{i=1}^{n} \Delta\gamma_{i}}$$
 
