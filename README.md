@@ -1,4 +1,4 @@
-![image](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/assets/147021014/36b01db8-fe56-4e5d-a3e9-1d86430368ac)![](https://img.shields.io/badge/DOI-xxx-violet)
+![](https://img.shields.io/badge/DOI-xxx-violet)
 # Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions
 This repository contains a collection of code, scripts and supporting information that are used or mentioned in the paper "Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions" by Shi et al..
 
