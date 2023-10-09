@@ -4583,6 +4583,633 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 ## Metagenome-centric analysis workflow
 All the scripts were developed for running on the PBS Pro and tested on eResearch High Performance Computing cluster at the University of Technology Sydney.
 
+### Run metaWRAP-Read_qc to trim the reads
+```
+#!/bin/bash
+#PBS -N QC
+#PBS -l ncpus=24
+#PBS -l mem=20gb
+#PBS -l walltime=10:00:00
+
+set -e
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "${SCRATCH}/RAW_READS"
+mkdir -p "${SCRATCH}/READ_QC"
+
+cd ${SCRATCH}/RAW_READS
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/${SAMPLE}_1.fastq" || ! -f "$HOME/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+    cp "$HOME/${SAMPLE}_1.fastq" "${SCRATCH}/RAW_READS"
+    cp "$HOME/${SAMPLE}_2.fastq" "${SCRATCH}/RAW_READS"
+done >> "$LOG_FILE" 2>&1
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+cd ${SCRATCH}/
+
+# Running quality control for each sample
+metawrap read_qc -1 RAW_READS/L1EFJ120285_1.fastq -2 RAW_READS/L1EFJ120285_2.fastq -t 24 --skip-bmtagger -o READ_QC/L1EFJ120285 >> "$LOG_FILE" 2>&1
+metawrap read_qc -1 RAW_READS/L1EFJ120286_1.fastq -2 RAW_READS/L1EFJ120286_2.fastq -t 24 --skip-bmtagger -o READ_QC/L1EFJ120286 >> "$LOG_FILE" 2>&1
+metawrap read_qc -1 RAW_READS/L1EFJ120287_1.fastq -2 RAW_READS/L1EFJ120287_2.fastq -t 24 --skip-bmtagger -o READ_QC/L1EFJ120287 >> "$LOG_FILE" 2>&1
+metawrap read_qc -1 RAW_READS/L1EFJ120288_1.fastq -2 RAW_READS/L1EFJ120288_2.fastq -t 24 --skip-bmtagger -o READ_QC/L1EFJ120288 >> "$LOG_FILE" 2>&1
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/READ_QC" ]]; then
+    if [[ -d "$HOME/READ_QC" ]]; then
+        echo "Target directory already exists, merging contents..." | tee -a "$LOG_FILE"
+    fi
+    mv "${SCRATCH}/READ_QC" "$HOME/READ_QC"
+fi
+
+#rm ${SCRATCH}/
+#cd ${PBS_O_WORKDIR}
+
+#if [[ -d "${SCRATCH}" ]]; then
+#    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+#fi
+```
+
+### Assembling the metagenomes with the metaWRAP-Assembly module
+```
+#!/bin/bash
+#PBS -N Assembly
+#PBS -l ncpus=50
+#PBS -l mem=500gb
+#PBS -l walltime=200:00:00
+
+set -e
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "$SCRATCH"
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Start timestamp
+echo "Script started at $(date)" | tee -a "$LOG_FILE"
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" || ! -f "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+    cp "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" "${SCRATCH}/"
+    cp "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" "${SCRATCH}/"
+done >> "$LOG_FILE" 2>&1
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+#Concatinate the reads from all the samples:
+
+cd $SCRATCH
+
+cat L*_1.fastq > ALL_READS_1.fastq
+cat L*_2.fastq > ALL_READS_2.fastq
+
+# Assemble the reads
+
+echo "Assemble started at $(date)" | tee -a "$LOG_FILE"
+metawrap assembly -1 ALL_READS_1.fastq -2 ALL_READS_2.fastq -m 500 -t 50 --metaspades -o ASSEMBLY >> "$LOG_FILE" 2>&1
+echo "Assemble ended at $(date)" | tee -a "$LOG_FILE"
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/ASSEMBLY" ]]; then
+    if [[ -d "$HOME/ASSEMBLY" ]]; then
+        echo "Target directory already exists, merging contents..." | tee -a "$LOG_FILE"
+    fi
+    rsync -a "${SCRATCH}/ASSEMBLY" "$HOME/ASSEMBLY"
+else
+    echo "ASSEMBLY directory not found! Process may have failed." | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+# End timestamp
+echo "Script ended at $(date)" | tee -a "$LOG_FILE"
+
+#
+#rm ${SCRATCH}/*.raw.fastq
+#cd ${PBS_O_WORKDIR}
+#
+#if [[ -d "${SCRATCH}" ]]; then
+ #   rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+#fi
+```
+
+### Bin the co-assembly with CONCOCT
+```
+#!/bin/bash
+#PBS -N Concoct
+#PBS -l ncpus=50
+#PBS -l mem=500gb
+#PBS -l walltime=200:00:00
+
+set -e
+trap 'echo "An error occurred at line $LINENO. Exiting..." | tee -a "$LOG_FILE"; exit 1' ERR
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "$SCRATCH"/CLEAN_READS
+mkdir -p "$SCRATCH"/INITIAL_BINNING
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Start timestamp
+echo "Script started at $(date)" | tee -a "$LOG_FILE"
+
+# Check and copy final_assembly.fasta outside of loop to avoid redundancy
+if [[ ! -f "$HOME/ASSEMBLY/ASSEMBLY/final_assembly.fasta" ]]; then
+    echo "final_assembly.fasta not found!" | tee -a "$LOG_FILE"
+    exit 1
+fi
+cp "$HOME/ASSEMBLY/ASSEMBLY/final_assembly.fasta" "${SCRATCH}/"
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" || ! -f "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+    cp "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" "${SCRATCH}/CLEAN_READS/"
+    cp "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" "${SCRATCH}/CLEAN_READS/"
+done >> "$LOG_FILE" 2>&1
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+# Concatenate the reads from all the samples
+cd $SCRATCH
+
+# Bin reads by maxbin2
+echo "Assemble started at $(date)" | tee -a "$LOG_FILE"
+metawrap binning -o INITIAL_BINNING -t 50 -m 500 -a final_assembly.fasta --concoct CLEAN_READS/L1EGH120058*.fastq >> "$LOG_FILE" 2>&1
+echo "Assemble ended at $(date)" | tee -a "$LOG_FILE"
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/INITIAL_BINNING" ]]; then
+    if [[ -d "$HOME/INITIAL_BINNING" ]]; then
+        echo "Target directory already exists, merging contents with backup..." | tee -a "$LOG_FILE"
+    fi
+    rsync -a --backup "${SCRATCH}/INITIAL_BINNING" "$HOME/INITIAL_BINNING"
+else
+    echo "INITIAL_BINNING directory not found! Process may have failed." | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+# End timestamp
+echo "Script ended at $(date)" | tee -a "$LOG_FILE"
+```
+
+### Bin the co-assembly with MaxBin
+```
+#!/bin/bash
+#PBS -N maxbin2
+#PBS -l ncpus=50
+#PBS -l mem=500gb
+#PBS -l walltime=200:00:00
+
+set -e
+trap 'echo "An error occurred at line $LINENO. Exiting..." | tee -a "$LOG_FILE"; exit 1' ERR
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "$SCRATCH"/CLEAN_READS
+mkdir -p "$SCRATCH"/INITIAL_BINNING
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Start timestamp
+echo "Script started at $(date)" | tee -a "$LOG_FILE"
+
+# Check and copy final_assembly.fasta outside of loop to avoid redundancy
+if [[ ! -f "$HOME/ASSEMBLY/ASSEMBLY/final_assembly.fasta" ]]; then
+    echo "final_assembly.fasta not found!" | tee -a "$LOG_FILE"
+    exit 1
+fi
+cp "$HOME/ASSEMBLY/ASSEMBLY/final_assembly.fasta" "${SCRATCH}/"
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" || ! -f "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+    cp "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" "${SCRATCH}/CLEAN_READS/"
+    cp "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" "${SCRATCH}/CLEAN_READS/"
+done >> "$LOG_FILE" 2>&1
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+# Concatenate the reads from all the samples
+cd $SCRATCH
+
+# Bin reads by maxbin2
+echo "Assemble started at $(date)" | tee -a "$LOG_FILE"
+metawrap binning -o INITIAL_BINNING -t 50 -m 500 -a final_assembly.fasta --maxbin2 CLEAN_READS/L1EGH120058*.fastq >> "$LOG_FILE" 2>&1
+echo "Assemble ended at $(date)" | tee -a "$LOG_FILE"
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/INITIAL_BINNING" ]]; then
+    if [[ -d "$HOME/INITIAL_BINNING" ]]; then
+        echo "Target directory already exists, merging contents with backup..." | tee -a "$LOG_FILE"
+    fi
+    rsync -a --backup "${SCRATCH}/INITIAL_BINNING" "$HOME/INITIAL_BINNING"
+else
+    echo "INITIAL_BINNING directory not found! Process may have failed." | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+# End timestamp
+echo "Script ended at $(date)" | tee -a "$LOG_FILE"
+```
+
+### Bin the co-assembly with metaBAT
+```
+#!/bin/bash
+#PBS -N metabat2
+#PBS -l ncpus=50
+#PBS -l mem=500gb
+#PBS -l walltime=200:00:00
+
+set -e
+trap 'echo "An error occurred at line $LINENO. Exiting..." | tee -a "$LOG_FILE"; exit 1' ERR
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "$SCRATCH"/CLEAN_READS
+mkdir -p "$SCRATCH"/INITIAL_BINNING
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Start timestamp
+echo "Script started at $(date)" | tee -a "$LOG_FILE"
+
+# Check and copy final_assembly.fasta outside of loop to avoid redundancy
+if [[ ! -f "$HOME/ASSEMBLY/ASSEMBLY/final_assembly.fasta" ]]; then
+    echo "final_assembly.fasta not found!" | tee -a "$LOG_FILE"
+    exit 1
+fi
+cp "$HOME/ASSEMBLY/ASSEMBLY/final_assembly.fasta" "${SCRATCH}/"
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" || ! -f "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+    cp "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" "${SCRATCH}/CLEAN_READS/"
+    cp "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" "${SCRATCH}/CLEAN_READS/"
+done >> "$LOG_FILE" 2>&1
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+# Concatenate the reads from all the samples
+cd $SCRATCH
+
+# Bin reads by maxbin2
+echo "Assemble started at $(date)" | tee -a "$LOG_FILE"
+metawrap binning -o INITIAL_BINNING -t 50 -m 500 -a final_assembly.fasta --metabat2 CLEAN_READS/L1EGH120058*.fastq >> "$LOG_FILE" 2>&1
+echo "Assemble ended at $(date)" | tee -a "$LOG_FILE"
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/INITIAL_BINNING" ]]; then
+    if [[ -d "$HOME/INITIAL_BINNING" ]]; then
+        echo "Target directory already exists, merging contents with backup..." | tee -a "$LOG_FILE"
+    fi
+    rsync -a --backup "${SCRATCH}/INITIAL_BINNING" "$HOME/INITIAL_BINNING"
+else
+    echo "INITIAL_BINNING directory not found! Process may have failed." | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+# End timestamp
+echo "Script ended at $(date)" | tee -a "$LOG_FILE"
+```
+
+### Consolidate bin sets with the Bin_refinement module
+```
+#!/bin/bash
+#PBS -N BIN_REFINEMENT
+#PBS -l ncpus=54
+#PBS -l mem=500gb
+#PBS -l walltime=100:00:00
+
+set -e
+trap 'echo "An error occurred at line $LINENO. Exiting..." | tee -a "$LOG_FILE"; exit 1' ERR
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "$SCRATCH"/BIN_REFINEMENT
+mkdir -p "$SCRATCH"/INITIAL_BINNING
+
+# Start timestamp
+echo "Script started at $(date)" | tee -a "$LOG_FILE"
+
+# Check and copy final_assembly.fasta outside of loop to avoid redundancy
+
+cp -r "$HOME/INITIAL_BINNING/INITIAL_BINNING" "${SCRATCH}/"
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+# Concatenate the reads from all the samples
+cd $SCRATCH
+
+# Bin reads by maxbin2
+echo "refinement started at $(date)" | tee -a "$LOG_FILE"
+metawrap bin_refinement -o BIN_REFINEMENT -t 54 -m 500 -A INITIAL_BINNING/metabat2_bins/ -B INITIAL_BINNING/maxbin2_bins/ -C INITIAL_BINNING/concoct_bins/ -c 50 -x 10 >> "$LOG_FILE" 2>&1
+echo "refinement ended at $(date)" | tee -a "$LOG_FILE"
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/BIN_REFINEMENT" ]]; then
+    if [[ -d "$HOME/BIN_REFINEMENT" ]]; then
+        echo "Target directory already exists, merging contents with backup..." | tee -a "$LOG_FILE"
+    fi
+    rsync -a --backup "${SCRATCH}/BIN_REFINEMENT" "$HOME"
+else
+    echo "BIN_REFINEMENT directory not found! Process may have failed." | tee -a "$LOG_FILE"
+    exit 1
+fi
+
+# End timestamp
+echo "Script ended at $(date)" | tee -a "$LOG_FILE"
+
+```
+
+### Calculate the abundance of bins across the samples
+```
+#!/bin/bash
+#PBS -N quant
+#PBS -l ncpus=30
+#PBS -l mem=100gb
+#PBS -l walltime=100:00:00
+
+
+set -e
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "${SCRATCH}/CLEAN_READS"
+
+cd ${SCRATCH}/CLEAN_READS
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" || ! -f "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+      cp "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" "${SCRATCH}/CLEAN_READS"
+    cp "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" "${SCRATCH}/CLEAN_READS"
+done >> "$LOG_FILE" 2>&1
+
+echo "Copying ASSEMBLY file"
+cp -r "$HOME/ASSEMBLY/ASSEMBLY" "${SCRATCH}"
+
+echo "Copying BIN_REFINEMENT file"
+cp -r "$HOME/BIN_REFINEMENT" "${SCRATCH}"
+
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+cd ${SCRATCH}/
+
+# Running quality control for each sample
+metawrap quant_bins -t 30 -b BIN_REFINEMENT/metawrap_50_10_bins -o QUANT_BINS -a ASSEMBLY/final_assembly.fasta CLEAN_READS/L*.fastq >> "$LOG_FILE" 2>&1
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/QUANT_BINS" ]]; then
+    if [[ -d "$HOME/QUANT_BINS" ]]; then
+        echo "Target directory already exists, merging contents..." | tee -a "$LOG_FILE"
+    fi
+    mv "${SCRATCH}/QUANT_BINS" "$HOME"
+fi
+
+rm ${SCRATCH}/
+#cd ${PBS_O_WORKDIR}
+
+#if [[ -d "${SCRATCH}" ]]; then
+#    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+#fi
+```
+
+### Re-assemble the consolidated bin set with the Reassemble_bins module
+```
+#!/bin/bash
+#PBS -N Reassemble
+#PBS -l ncpus=50
+#PBS -l mem=500gb
+#PBS -l walltime=200:00:00
+
+
+set -e
+
+SCRATCH="/scratch/${USER}_${PBS_JOBID%.*}"
+LOG_FILE="${HOME}/script_${PBS_JOBID%.*}.log"
+mkdir -p "${SCRATCH}/CLEAN_READS"
+mkdir -p "${SCRATCH}/BIN_REFINEMENT"
+
+cd ${SCRATCH}/CLEAN_READS
+
+# Creating an array of sample identifiers
+SAMPLES=(L1EFJ120285 L1EFJ120286 L1EFJ120287 L1EFJ120288)
+
+# Start timestamp
+echo "Script started at $(date)" | tee -a "$LOG_FILE"
+
+# Copying files to scratch directory
+for SAMPLE in "${SAMPLES[@]}"; do
+    echo "Copying $SAMPLE"
+    if [[ ! -f "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" || ! -f "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" ]]; then
+        echo "File for sample ${SAMPLE} not found!" | tee -a "$LOG_FILE"
+        exit 1
+    fi
+    cp "$HOME/CLEAN_READS/${SAMPLE}_1.fastq" "${SCRATCH}/"
+    cp "$HOME/CLEAN_READS/${SAMPLE}_2.fastq" "${SCRATCH}/"
+done >> "$LOG_FILE" 2>&1
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+#Concatinate the reads from all the samples:
+
+cd ${SCRATCH}/
+
+cat L*_1.fastq > ALL_READS_1.fastq
+cat L*_2.fastq > ALL_READS_2.fastq
+
+echo "Copying BIN_REFINEMENT file"
+cp -r "$HOME/BIN_REFINEMENT" "${SCRATCH}"
+
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate metawrap-env
+
+cd ${SCRATCH}/
+
+# Running quality control for each sample
+metawrap reassemble_bins -o BIN_REASSEMBLY -1 ALL_READS_1.fastq -2 ALL_READS_2.fastq -t 50 -m 500 -c 50 -x 10 -b BIN_REFINEMENT/metawrap_50_10_bins  >> "$LOG_FILE" 2>&1
+
+conda deactivate
+
+# Moving results and cleaning up
+if [[ -d "${SCRATCH}/BIN_REASSEMBLY" ]]; then
+    if [[ -d "$HOME/BIN_REASSEMBLY" ]]; then
+        echo "Target directory already exists, merging contents..." | tee -a "$LOG_FILE"
+    fi
+    mv "${SCRATCH}/BIN_REASSEMBLY" "$HOME"
+    mv "${SCRATCH}/ALL_READS_1.fastq" "$HOME"
+    mv "${SCRATCH}/ALL_READS_2.fastq" "$HOME"
+fi
+
+rm ${SCRATCH}/
+#cd ${PBS_O_WORKDIR}
+
+#if [[ -d "${SCRATCH}" ]]; then
+#    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+#fi
+```
+
+### GTDB-tk
+```
+#!/bin/bash
+
+#PBS -N gtdbtk
+#PBS -l ncpus=50
+#PBS -l mem=1000gb
+#PBS -l walltime=10:00:00
+
+source $HOME/miniconda2/etc/profile.d/conda.sh
+conda activate gtdbtk
+
+gtdbtk classify_wf --genome_dir $HOME/BIN_REASSEMBLY/reassembled_bins --out_dir $HOME/gtdbtk --extension fa --cpus 50 --mash_db $HOME/mash >> "gtdbtk.log" 2>&1
+
+conda deactivate
+```
+
+### iqtree
+```
+conda activate gtdbtk
+iqtree -s gtdbtk.bac120.user_msa.fasta -m MFP -nt 40 -bb 1000 -redo -mredo
+conda deactivate gtdbtk
+```
+
+### iqtree
+```
+conda activate gtdbtk
+iqtree -s gtdbtk.bac120.user_msa.fasta -m MFP -nt 40 -bb 1000 -redo -mredo
+conda deactivate gtdbtk
+```
+
+### prokka
+
+
+
+### Eggnog-mapper
+#!/bin/bash
+
+#PBS -N eggnog_mapper
+#PBS -l ncpus=56
+#PBS -l mem=100gb
+#PBS -l walltime=100:00:00
+
+source ~/miniconda2/etc/profile.d/conda.sh
+conda activate eggnog-mapper
+
+for id in /shared/homes/13949072/bin_prokka/*.output;
+do 
+	file=$(basename $id);
+	sample=$(file%.*);
+	sample=$(sample%.*);
+  cd ~/eggnog_output	
+	mkdir $sample  
+  cd $(echo $id); 
+  echo currently is under $sample > ~/log2.txt
+	~/miniconda2/envs/eggnog-mapper/bin/emapper.py --cpu 56 -o $sample --output_dir ~/eggnog_output/$sample/ -m diamond --override -i PROKKA_$sample.faa --evalue 0.001 --score 60 --pident 40 --query_cover 20 --subject_cover 20 --itype proteins --tax_scope auto --target_orthologs all --go_evidence non-electronic --pfam_realign none --report_orthologs --decorate_gff yes --excel 
+	echo $sample has been done > ~/log2.txt
+	cd ~/; 
+done
+conda deactivate
+
+### dbCAN2
+```
+#!/bin/bash
+
+
+#PBS -N Cazyme
+#PBS -l ncpus=56
+#PBS -l mem=100gb
+#PBS -l walltime=100:00:00
+
+#1) go to the directory in which locates the dbCAN database
+cd /shared/homes/13949072/biodatabase/dbCAN/
+
+#2) format the database for hmmscan
+hmmpress dbCAN.txt
+
+source ~/miniconda2/etc/profile.d/conda.sh
+conda activate dbcan
+
+for id in /shared/homes/13949072/binning/bin_prokka/*.output
+do
+
+#3）go to the folder that contains amino acid sequences of genomes
+	cd $id
+#4）do hmmscan;
+	find . -name "*.faa" | while read line ; do hmmscan --domtblout ${line}.out.dm /shared/homes/13949072/biodatabase/dbCAN/dbCAN.txt $line > ${line}.out; done
+#5) parse the hmmscan results
+	find . -name "*.out.dm"|while read line ; do python ~/hmmscan-parser.py $line > ${line}.ps; done
+
+#6) move the parsed hmmscan results to this directory, in my case, the directory name is 'dbCAN_annotation_results'
+	mv *.out.dm.ps ~/results/
+  mv *.dm ~/others/
+  mv *.out ~/others/
+
+conda deactivate
+```
+
 
 ## Copyright
 Xingdong Shi 
