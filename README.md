@@ -4584,7 +4584,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 All the scripts were developed for running on the PBS Pro and tested on eResearch High Performance Computing cluster at the University of Technology Sydney.
 
 ### Run metaWRAP-Read_qc to trim the reads
-```
+```shell
 #!/bin/bash
 #PBS -N QC
 #PBS -l ncpus=24
@@ -4644,7 +4644,7 @@ fi
 ```
 
 ### Assembling the metagenomes with the metaWRAP-Assembly module
-```
+```shell
 #!/bin/bash
 #PBS -N Assembly
 #PBS -l ncpus=50
@@ -4716,7 +4716,7 @@ echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 ```
 
 ### Bin the co-assembly with CONCOCT
-```
+```shell
 #!/bin/bash
 #PBS -N Concoct
 #PBS -l ncpus=50
@@ -4784,7 +4784,7 @@ echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 ```
 
 ### Bin the co-assembly with MaxBin
-```
+```shell
 #!/bin/bash
 #PBS -N maxbin2
 #PBS -l ncpus=50
@@ -4852,7 +4852,7 @@ echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 ```
 
 ### Bin the co-assembly with metaBAT
-```
+```shell
 #!/bin/bash
 #PBS -N metabat2
 #PBS -l ncpus=50
@@ -4920,7 +4920,7 @@ echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 ```
 
 ### Consolidate bin sets with the Bin_refinement module
-```
+```shell
 #!/bin/bash
 #PBS -N BIN_REFINEMENT
 #PBS -l ncpus=54
@@ -4972,7 +4972,7 @@ echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 ```
 
 ### Calculate the abundance of bins across the samples
-```
+```shell
 #!/bin/bash
 #PBS -N quant
 #PBS -l ncpus=30
@@ -5036,7 +5036,7 @@ rm ${SCRATCH}/
 ```
 
 ### Re-assemble the consolidated bin set with the Reassemble_bins module
-```
+```shell
 #!/bin/bash
 #PBS -N Reassemble
 #PBS -l ncpus=50
@@ -5113,7 +5113,7 @@ rm ${SCRATCH}/
 ```
 
 ### GTDB-tk
-```
+```shell
 #!/bin/bash
 
 #PBS -N gtdbtk
@@ -5130,24 +5130,25 @@ conda deactivate
 ```
 
 ### iqtree
-```
+```shell
 conda activate gtdbtk
 iqtree -s gtdbtk.bac120.user_msa.fasta -m MFP -nt 40 -bb 1000 -redo -mredo
 conda deactivate gtdbtk
 ```
 
 ### iqtree
-```
+```shell
 conda activate gtdbtk
 iqtree -s gtdbtk.bac120.user_msa.fasta -m MFP -nt 40 -bb 1000 -redo -mredo
 conda deactivate gtdbtk
 ```
 
 ### prokka
-
-
+```shell
+```
 
 ### Eggnog-mapper
+```shell
 #!/bin/bash
 
 #PBS -N eggnog_mapper
@@ -5172,9 +5173,10 @@ do
 	cd ~/; 
 done
 conda deactivate
+```
 
 ### dbCAN2
-```
+```shell
 #!/bin/bash
 
 
