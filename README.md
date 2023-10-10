@@ -4578,7 +4578,11 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 
 #### Dataset S11 The glycoside hydrolases in each MAGs
 
+Due to a large table size, please find Dataset S11 from MS file.
+
 #### Dataset S12 The main functional genes in each MAGs
+
+Due to a large table size, please find Dataset S12 from MS file.
 
 ## Metagenome-centric analysis workflow
 All the scripts were developed for running on the iHPC (interactive High-Performance Computing) facility or PBS Pro managed High Performance Computing cluster at the University of Technology Sydney.
