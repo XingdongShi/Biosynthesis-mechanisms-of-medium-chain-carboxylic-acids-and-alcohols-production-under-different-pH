@@ -44,7 +44,6 @@ The markdown file is shown as follows.
     + [Re-assemble the consolidated bin set with the Reassemble module](#re-assemble-the-consolidated-bin-set-with-the-reassemble-module)
     + [GTDB-tk](#gtdb-tk)
     + [iqtree](#iqtree)
-    + [iqtree](#iqtree-1)
     + [prokka](#prokka)
     + [Eggnog-mapper](#eggnog-mapper)
     + [dbCAN2](#dbcan2)
