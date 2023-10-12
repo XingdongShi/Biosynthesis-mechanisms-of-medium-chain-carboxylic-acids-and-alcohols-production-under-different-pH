@@ -6,37 +6,49 @@ The supporting information includes some additional calculation procedures and t
 
 The MS file is here - ([Supplementary Information.docx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Information.docx))
 
-                    - ([Supplementary Dataset.xlsx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx))
-                    
-The markdown file is here - ([Supplementary Information.md](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supporting%20information.md))
-
-                          - ([Supplementary Dataset.md](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.md))
+                    - ([Supplementary Dataset.xlsx]([https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx]
+		                        
+The markdown file is shown as follows.
                     
 ## Table of content
-* [Supporting information and dataset](#supporting-information-and-dataset)
- + [Supporting Texst S1 to S2 and Table S1 to S6](#supporting-texst-s1-to-s2-and-table-s1-to-s6)
-    - [Text S1 The calculation procedures](#text-s1-the-calculation-procedures)
-    - [Text S2 The calculation of undissociated MCCA concentrations in E5 and E7 groups](#text-s2-the-calculation-of-undissociated-mcca-concentrations-in-e5-and-e7-groups)
-    - [Table S1 The average concentration (mg-COD/L) of main products and their selectivity (electron/ carbon)](#table-s1-the-average-concentration-of-main-products-and-their-selectivity)
-    - [Table S2 The specificities of primary products (on a COD basis) for each group](#table-s2-the-specificities-of-primary-products-for-each-group)
-    - [Table S3 The selectivity of each compound at pH 5 based on the electron and carbon](#table-s3-the-selectivity-of-each-compound-at-ph-5-based-on-the-electron-and-carbon)
-    - [Table S4 The selectivity of each compound at pH 7 based on the electron and carbon](#table-s4-the-selectivity-of-each-compound-at-ph-7-based-on-the-electron-and-carbon)
-    - [Table S5 The selectivity of each compound at pH 10 based on the electron and carbon](#table-s5-the-selectivity-of-each-compound-at-ph-10-based-on-the-electron-and-carbon)
-    - [Table S6 The overall details of metagenomic assembly results](#table-s6-the-overall-details-of-metagenomic-assembly-results)
- + [Dataset S1 to S12](#dataset-s1-to-s12)
-    - [Dataset S1 The exact Fisher's test results between E5 and E10](#dataset-s1-the-exact-fisher-test-results-between-e5-and-e10)
-    - [Dataset S2 The exact Fisher's test results between C7 and E7](#dataset-s2-the-exact-fisher-test-results-between-c7-and-e7)
-    - [Dataset S3 The exact Fisher's test results between E5 and E7](#dataset-s3-the-exact-fisher-test-results-between-e5-and-e7)
-    - [Dataset S4 The exact Fisher's test results between E7 and E10](#dataset-s4-the-exact-fisher-test-results-between-e7-and-e10)
-    - [Dataset S5 The exact Fisher's test results between C7 and E10](#dataset-s5-the-exact-fisher-test-results-between-c7-and-e10)
-    - [Dataset S6 The exact Fisher's test results between C7 and E5](#dataset-s6-the-exact-fisher-test-results-between-c7-and-e5)
-    - [Dataset S7 The abundance of main enzyme for producing MCCA and alcohols in each group](#dataset-s7-the-abundance-of-main-enzyme-for-producing-mcca-and-alcohols-in-each-group)
-    - [Dataset S8 The main enzyme proportion in each sample](#dataset-s8-the-main-enzyme-proportion-in-each-sample)
-    - [Dataset S9 The overall characteristics of the MAGs recovered in this study](#dataset-s9-the-overall-characteristics-of-the-mags-recovered-in-this-study)
-    - [Dataset S10 The detailed taxa of MAGs using GTDB-Tk](#dataset-s10-the-detailed-taxa-of-mags-using-gtdb-tk)
-    - [Dataset S11 The glycoside hydrolases in each MAGs](#dataset-s11-the-glycoside-hydrolases-in-each-mags)
-    - [Dataset S12 The main functional genes in each MAGs](#dataset-s12-the-main-functional-genes-in-each-mags)
+  * [Supporting information and dataset](#supporting-information-and-dataset)
+    + [Supporting Texst S1 to S2 and Table S1 to S6](#supporting-texst-s1-to-s2-and-table-s1-to-s6)
+      - [Text S1 The calculation procedures](#text-s1-the-calculation-procedures)
+      - [Text S2 The calculation of undissociated MCCA concentrations in E5 and E7 groups](#text-s2-the-calculation-of-undissociated-mcca-concentrations-in-e5-and-e7-groups)
+      - [Table S1 The average concentration of main products and their selectivity](#table-s1-the-average-concentration-of-main-products-and-their-selectivity)
+      - [Table S2 The specificities of primary products for each group](#table-s2-the-specificities-of-primary-products-for-each-group)
+      - [Table S3 The selectivity of each compound at pH 5 based on the electron and carbon](#table-s3-the-selectivity-of-each-compound-at-ph-5-based-on-the-electron-and-carbon)
+      - [Table S4 The selectivity of each compound at pH 7 based on the electron and carbon](#table-s4-the-selectivity-of-each-compound-at-ph-7-based-on-the-electron-and-carbon)
+      - [Table S5 The selectivity of each compound at pH 10 based on the electron and carbon](#table-s5-the-selectivity-of-each-compound-at-ph-10-based-on-the-electron-and-carbon)
+      - [Table S6 The overall details of metagenomic assembly results](#table-s6-the-overall-details-of-metagenomic-assembly-results)
+    + [Dataset S1 to S12](#dataset-s1-to-s12)
+      - [Dataset S1 The exact Fisher test results between E5 and E10](#dataset-s1-the-exact-fisher-test-results-between-e5-and-e10)
+      - [Dataset S2 The exact Fisher test results between C7 and E7](#dataset-s2-the-exact-fisher-test-results-between-c7-and-e7)
+      - [Dataset S3 The exact Fisher test results between E5 and E7](#dataset-s3-the-exact-fisher-test-results-between-e5-and-e7)
+      - [Dataset S4 The exact Fisher test results between E7 and E10](#dataset-s4-the-exact-fisher-test-results-between-e7-and-e10)
+      - [Dataset S5 The exact Fisher test results between C7 and E10](#dataset-s5-the-exact-fisher-test-results-between-c7-and-e10)
+      - [Dataset S6 The exact Fisher test results between C7 and E5](#dataset-s6-the-exact-fisher-test-results-between-c7-and-e5)
+      - [Dataset S7 The abundance of main enzyme for producing MCCA and alcohols in each group](#dataset-s7-the-abundance-of-main-enzyme-for-producing-mcca-and-alcohols-in-each-group)
+      - [Dataset S8 The main enzyme proportion in each sample](#dataset-s8-the-main-enzyme-proportion-in-each-sample)
+      - [Dataset S9 The overall characteristics of the MAGs recovered in this study](#dataset-s9-the-overall-characteristics-of-the-mags-recovered-in-this-study)
+      - [Dataset S10 The detailed taxa of MAGs using GTDB-Tk](#dataset-s10-the-detailed-taxa-of-mags-using-gtdb-tk)
+      - [Dataset S11 The glycoside hydrolases in each MAGs](#dataset-s11-the-glycoside-hydrolases-in-each-mags)
+      - [Dataset S12 The main functional genes in each MAGs](#dataset-s12-the-main-functional-genes-in-each-mags)
   * [Metagenome-centric analysis workflow](#metagenome-centric-analysis-workflow)
+    + [Run metaWRAP qc to trim the reads](#run-metawrap-qc-to-trim-the-reads)
+    + [Assembling the metagenomes with the metaWRAP-Assembly module](#assembling-the-metagenomes-with-the-metawrap-assembly-module)
+    + [Bin the co-assembly with CONCOCT](#bin-the-co-assembly-with-concoct)
+    + [Bin the co-assembly with MaxBin](#bin-the-co-assembly-with-maxbin)
+    + [Bin the co-assembly with metaBAT](#bin-the-co-assembly-with-metabat)
+    + [Consolidate bin sets with the refinement module](#consolidate-bin-sets-with-the-refinement-module)
+    + [Calculate the abundance of bins across the samples](#calculate-the-abundance-of-bins-across-the-samples)
+    + [Re-assemble the consolidated bin set with the Reassemble module](#re-assemble-the-consolidated-bin-set-with-the-reassemble-module)
+    + [GTDB-tk](#gtdb-tk)
+    + [iqtree](#iqtree)
+    + [iqtree](#iqtree-1)
+    + [prokka](#prokka)
+    + [Eggnog-mapper](#eggnog-mapper)
+    + [dbCAN2](#dbcan2)
   * [Copyright](#copyright)
 
 ## Supporting information and dataset
@@ -4587,7 +4599,7 @@ Due to a large table size, please find Dataset S12 from MS file.
 ## Metagenome-centric analysis workflow
 All the scripts were developed for running on the iHPC (interactive High-Performance Computing) facility or PBS Pro managed High Performance Computing cluster at the University of Technology Sydney.
 
-### Run metaWRAP-Read_qc to trim the reads
+### Run metaWRAP qc to trim the reads
 ```shell
 #!/bin/bash
 #PBS -N QC
@@ -4923,7 +4935,7 @@ fi
 echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 ```
 
-### Consolidate bin sets with the Bin_refinement module
+### Consolidate bin sets with the refinement module
 ```shell
 #!/bin/bash
 #PBS -N BIN_REFINEMENT
@@ -5039,7 +5051,7 @@ rm ${SCRATCH}/
 #fi
 ```
 
-### Re-assemble the consolidated bin set with the Reassemble_bins module
+### Re-assemble the consolidated bin set with the Reassemble module
 ```shell
 #!/bin/bash
 #PBS -N Reassemble
