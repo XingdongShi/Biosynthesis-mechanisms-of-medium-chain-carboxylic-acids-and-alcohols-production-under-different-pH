@@ -4443,12 +4443,12 @@ if [[ -d "${SCRATCH}/READ_QC" ]]; then
     mv "${SCRATCH}/READ_QC" "$HOME/READ_QC"
 fi
 
-#rm ${SCRATCH}/
-#cd ${PBS_O_WORKDIR}
+rm ${SCRATCH}/
+cd ${PBS_O_WORKDIR}
 
-#if [[ -d "${SCRATCH}" ]]; then
-#    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
-#fi
+if [[ -d "${SCRATCH}" ]]; then
+    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+fi
 ```
 
 ### Assembling the metagenomes with the metaWRAP-Assembly module
@@ -4515,12 +4515,12 @@ fi
 echo "Script ended at $(date)" | tee -a "$LOG_FILE"
 
 #
-#rm ${SCRATCH}/*.raw.fastq
-#cd ${PBS_O_WORKDIR}
-#
-#if [[ -d "${SCRATCH}" ]]; then
- #   rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
-#fi
+rm ${SCRATCH}/*.raw.fastq
+cd ${PBS_O_WORKDIR}
+
+if [[ -d "${SCRATCH}" ]]; then
+    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+fi
 ```
 
 ### Bin the co-assembly with CONCOCT
@@ -4776,7 +4776,6 @@ fi
 
 # End timestamp
 echo "Script ended at $(date)" | tee -a "$LOG_FILE"
-
 ```
 
 ### Calculate the abundance of bins across the samples
@@ -4836,11 +4835,11 @@ if [[ -d "${SCRATCH}/QUANT_BINS" ]]; then
 fi
 
 rm ${SCRATCH}/
-#cd ${PBS_O_WORKDIR}
+cd ${PBS_O_WORKDIR}
 
-#if [[ -d "${SCRATCH}" ]]; then
-#    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
-#fi
+if [[ -d "${SCRATCH}" ]]; then
+    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+fi
 ```
 
 ### Re-assemble the consolidated bin set with the Reassemble module
@@ -4913,11 +4912,11 @@ if [[ -d "${SCRATCH}/BIN_REASSEMBLY" ]]; then
 fi
 
 rm ${SCRATCH}/
-#cd ${PBS_O_WORKDIR}
+cd ${PBS_O_WORKDIR}
 
-#if [[ -d "${SCRATCH}" ]]; then
-#    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
-#fi
+if [[ -d "${SCRATCH}" ]]; then
+    rmdir "${SCRATCH}" || { echo "Directory not empty, unable to remove" >> "$LOG_FILE"; exit 1; }
+fi
 ```
 
 ### GTDB-tk
@@ -4929,19 +4928,20 @@ rm ${SCRATCH}/
 #PBS -l mem=1000gb
 #PBS -l walltime=10:00:00
 
+# Load the conda environment
 source $HOME/miniconda2/etc/profile.d/conda.sh
 conda activate gtdbtk
 
-gtdbtk classify_wf --genome_dir $HOME/BIN_REASSEMBLY/reassembled_bins --out_dir $HOME/gtdbtk --extension fa --cpus 50 --mash_db $HOME/mash >> "gtdbtk.log" 2>&1
+# Set input and output directories
+genome_dir="$HOME/BIN_REASSEMBLY/reassembled_bins"
+out_dir="$HOME/gtdbtk"
+log_file="gtdbtk.log"
 
+# Run gtdbtk classify_wf
+gtdbtk classify_wf --genome_dir "$genome_dir" --out_dir "$out_dir" --extension fa --cpus 50 --mash_db "$HOME/mash" >> "$log_file" 2>&1
+
+# Deactivate the conda environment
 conda deactivate
-```
-
-### iqtree
-```shell
-conda activate gtdbtk
-iqtree -s gtdbtk.bac120.user_msa.fasta -m MFP -nt 40 -bb 1000 -redo -mredo
-conda deactivate gtdbtk
 ```
 
 ### iqtree
@@ -4953,6 +4953,63 @@ conda deactivate gtdbtk
 
 ### prokka
 ```shell
+#!/bin/bash
+
+#PBS -N prokka
+#PBS -l ncpus=50
+#PBS -l mem=1000gb
+#PBS -l walltime=10:00:00
+
+# Define variables
+CONDA_PROFILE="$HOME/miniconda2/etc/profile.d/conda.sh"
+WORK_DIR="$HOME/BIN_REASSEMBLY/reassembled_bins"
+OUTPUT_DIR="Bin_all/Bin_prokka"
+
+# Activate Miniconda environment
+source "$CONDA_PROFILE"
+
+# Change to the working directory
+cd "$WORK_DIR" || exit 1
+
+# Loop through .fa files
+for i in *.fa; do
+    file="${i##*/}"
+    base="${file%.fa}"
+    thread=8  # Define the number of CPU threads
+    prokka "$i" --outdir "$OUTPUT_DIR/$base" --prefix "$base" --metagenome --cpus "$thread" --kingdom Bacteria
+    echo -e "\033[32m$i prokka Done...\033[0m"
+done
+
+# Create output directories
+mkdir -p "$OUTPUT_DIR/prokka_out_table"
+mkdir -p "$OUTPUT_DIR/prokka_map"
+mkdir -p "$OUTPUT_DIR/prokka_map_table"
+
+# Move prokka output files
+echo -e "\033[32mMoving prokka files...\033[0m"
+for i in "$OUTPUT_DIR/bin"*; do
+    fold="${i##*/}"
+    if [ -f "$i/$fold.tsv" ]; then
+        mv "$i/$fold.tsv" "$OUTPUT_DIR/prokka_out_table"  # Move prokka .tsv files
+    fi
+    if [ -f "$i/$fold.gff" ]; then
+        mv "$i/$fold.gff" "$OUTPUT_DIR/prokka_map"  # Move prokka .gff files
+    fi
+done
+
+# Extract relevant information from prokka gff files
+echo -e "\033[32mExtracting prokka gff information...\033[0m"
+for i in "$OUTPUT_DIR/prokka_map/bin.*.gff"; do
+    base="${i##*/}"
+    if [ -f "$i" ]; then
+        grep '^k' "$i" > "$OUTPUT_DIR/prokka_map_table/${base}.txt"
+        sed -i '1 iseqid\tsource\ttype\tstart\tend\tscore\tstrand\tphase\tattributes' "$OUTPUT_DIR/prokka_map_table/${base}.txt"
+    fi
+done
+
+# Run R script for prokka file count
+echo -e "\033[32mRunning R script for prokka file count...\033[0m"
+R CMD BATCH --args $HOME/prokka_fun_count.R
 ```
 
 ### Eggnog-mapper
@@ -4964,21 +5021,21 @@ conda deactivate gtdbtk
 #PBS -l mem=100gb
 #PBS -l walltime=100:00:00
 
-source ~/miniconda2/etc/profile.d/conda.sh
+source $HOME/miniconda2/etc/profile.d/conda.sh
 conda activate eggnog-mapper
 
-for id in /shared/homes/13949072/bin_prokka/*.output;
+for id in $HOME/bin_prokka/*.output;
 do 
 	file=$(basename $id);
 	sample=$(file%.*);
 	sample=$(sample%.*);
-  cd ~/eggnog_output	
+  cd $HOME/eggnog_output	
 	mkdir $sample  
   cd $(echo $id); 
-  echo currently is under $sample > ~/log2.txt
+  echo currently is under $sample > $HOME/log2.txt
 	~/miniconda2/envs/eggnog-mapper/bin/emapper.py --cpu 56 -o $sample --output_dir ~/eggnog_output/$sample/ -m diamond --override -i PROKKA_$sample.faa --evalue 0.001 --score 60 --pident 40 --query_cover 20 --subject_cover 20 --itype proteins --tax_scope auto --target_orthologs all --go_evidence non-electronic --pfam_realign none --report_orthologs --decorate_gff yes --excel 
-	echo $sample has been done > ~/log2.txt
-	cd ~/; 
+	echo $sample has been done > $HOME/log2.txt
+	cd $HOME; 
 done
 conda deactivate
 ```
@@ -4987,16 +5044,15 @@ conda deactivate
 ```shell
 #!/bin/bash
 
-
 #PBS -N Cazyme
 #PBS -l ncpus=56
 #PBS -l mem=100gb
 #PBS -l walltime=100:00:00
 
-#1) go to the directory in which locates the dbCAN database
+# go to the directory in which locates the dbCAN database
 cd /shared/homes/13949072/biodatabase/dbCAN/
 
-#2) format the database for hmmscan
+# format the database for hmmscan
 hmmpress dbCAN.txt
 
 source ~/miniconda2/etc/profile.d/conda.sh
@@ -5005,14 +5061,14 @@ conda activate dbcan
 for id in /shared/homes/13949072/binning/bin_prokka/*.output
 do
 
-#3）go to the folder that contains amino acid sequences of genomes
+# go to the folder that contains amino acid sequences of genomes
 	cd $id
-#4）do hmmscan;
+# do hmmscan;
 	find . -name "*.faa" | while read line ; do hmmscan --domtblout ${line}.out.dm /shared/homes/13949072/biodatabase/dbCAN/dbCAN.txt $line > ${line}.out; done
-#5) parse the hmmscan results
+# parse the hmmscan results
 	find . -name "*.out.dm"|while read line ; do python ~/hmmscan-parser.py $line > ${line}.ps; done
 
-#6) move the parsed hmmscan results to this directory, in my case, the directory name is 'dbCAN_annotation_results'
+# move the parsed hmmscan results to this directory, in my case, the directory name is 'dbCAN_annotation_results'
 	mv *.out.dm.ps ~/results/
   mv *.dm ~/others/
   mv *.out ~/others/
