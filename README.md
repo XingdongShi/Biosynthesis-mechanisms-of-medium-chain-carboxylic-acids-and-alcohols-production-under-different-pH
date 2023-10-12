@@ -5020,22 +5020,37 @@ R CMD BATCH --args $HOME/prokka_fun_count.R
 #PBS -l mem=100gb
 #PBS -l walltime=100:00:00
 
+# Load the conda environment
 source $HOME/miniconda2/etc/profile.d/conda.sh
 conda activate eggnog-mapper
 
-for id in $HOME/bin_prokka/*.output;
-do 
-	file=$(basename $id);
-	sample=$(file%.*);
-	sample=$(sample%.*);
-  cd $HOME/eggnog_output	
-	mkdir $sample  
-  cd $(echo $id); 
-  echo currently is under $sample > $HOME/log2.txt
-	~/miniconda2/envs/eggnog-mapper/bin/emapper.py --cpu 56 -o $sample --output_dir ~/eggnog_output/$sample/ -m diamond --override -i PROKKA_$sample.faa --evalue 0.001 --score 60 --pident 40 --query_cover 20 --subject_cover 20 --itype proteins --tax_scope auto --target_orthologs all --go_evidence non-electronic --pfam_realign none --report_orthologs --decorate_gff yes --excel 
-	echo $sample has been done > $HOME/log2.txt
-	cd $HOME; 
+# Define some common paths
+prokka_dir="$HOME/bin_prokka"
+output_dir="$HOME/eggnog_output"
+log_file="$HOME/log2.txt"
+
+# Loop through prokka output files
+for id in "$prokka_dir"/*.output; do
+    file=$(basename "$id")
+    sample="${file%.*.*}"
+    
+    # Create a directory for each sample
+    mkdir -p "$output_dir/$sample"
+    
+    # Change to the sample directory
+    cd "$output_dir/$sample" || exit 1
+
+    # Run eggnog-mapper
+    echo "Currently processing: $sample" > "$log_file"
+    $HOME/miniconda2/envs/eggnog-mapper/bin/emapper.py --cpu 56 -o "$sample" --output_dir "$output_dir/$sample" -m diamond --override -i "PROKKA_$sample.faa" --evalue 0.001 --score 60 --pident 40 --query_cover 20 --subject_cover 20 --itype proteins --tax_scope auto --target_orthologs all --go_evidence non-electronic --pfam_realign none --report_orthologs --decorate_gff yes --excel
+
+    echo "$sample has been processed." >> "$log_file"
+    
+    # Change back to the home directory
+    cd "$HOME" || exit 1
 done
+
+# Deactivate the conda environment
 conda deactivate
 ```
 
@@ -5048,30 +5063,38 @@ conda deactivate
 #PBS -l mem=100gb
 #PBS -l walltime=100:00:00
 
-# go to the directory in which locates the dbCAN database
-cd /shared/homes/13949072/biodatabase/dbCAN/
+# Change to the directory where the dbCAN database is located
+cd $HOME/biodatabase/dbCAN/
 
-# format the database for hmmscan
+# Format the database for hmmscan
 hmmpress dbCAN.txt
 
-source ~/miniconda2/etc/profile.d/conda.sh
+# Load the conda environment
+source $HOME/miniconda2/etc/profile.d/conda.sh
 conda activate dbcan
 
-for id in /shared/homes/13949072/binning/bin_prokka/*.output
-do
+# Loop through prokka output files
+for id in /shared/homes/13949072/binning/bin_prokka/*.output; do
+    # Change to the folder that contains amino acid sequences of genomes
+    cd "$id"
+    
+    # Perform hmmscan
+    find . -name "*.faa" | while read line; do
+        hmmscan --domtblout "${line}.out.dm" $HOME/biodatabase/dbCAN/dbCAN.txt "$line" > "${line}.out"
+    done
+    
+    # Parse the hmmscan results
+    find . -name "*.out.dm" | while read line; do
+        python $HOME/hmmscan-parser.py "$line" > "${line}.ps"
+    done
+    
+    # Move the parsed hmmscan results to the 'results' directory
+    mv *.out.dm.ps $HOME/results/
+    mv *.dm $HOME/others/
+    mv *.out $HOME/others/
+done
 
-# go to the folder that contains amino acid sequences of genomes
-	cd $id
-# do hmmscan;
-	find . -name "*.faa" | while read line ; do hmmscan --domtblout ${line}.out.dm /shared/homes/13949072/biodatabase/dbCAN/dbCAN.txt $line > ${line}.out; done
-# parse the hmmscan results
-	find . -name "*.out.dm"|while read line ; do python ~/hmmscan-parser.py $line > ${line}.ps; done
-
-# move the parsed hmmscan results to this directory, in my case, the directory name is 'dbCAN_annotation_results'
-	mv *.out.dm.ps ~/results/
-  mv *.dm ~/others/
-  mv *.out ~/others/
-
+# Deactivate the conda environment
 conda deactivate
 ```
 
