@@ -5,22 +5,21 @@ This repository contains a collection of code, scripts and supporting informatio
 The supporting information includes some additional calculation procedures and tables.
 
 The MS files are here：
-- ([Supplementary Information.docx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Information.docx))
-- ([Supplementary Dataset.xlsx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx))
-			                        
+- [Supplementary Information.docx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Information.docx)
+- [Supplementary Dataset.xlsx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx)
+		
 The markdown file is shown as follows.
                     
 ## Table of content
   * [Supporting information and dataset](#supporting-information-and-dataset)
-    + [Supporting Texst S1 to S2 and Table S1 to S6](#supporting-texst-s1-to-s2-and-table-s1-to-s6)
+    + [Supporting Texst S1 to S2 and Table S1 to S5](#supporting-texst-s1-to-s2-and-table-s1-to-s6)
       - [Text S1 The calculation procedures](#text-s1-the-calculation-procedures)
       - [Text S2 The calculation of undissociated MCCA concentrations in E5 and E7 groups](#text-s2-the-calculation-of-undissociated-mcca-concentrations-in-e5-and-e7-groups)
-      - [Table S1 The average concentration of main products and their selectivity](#table-s1-the-average-concentration-of-main-products-and-their-selectivity)
-      - [Table S2 The specificities of primary products for each group](#table-s2-the-specificities-of-primary-products-for-each-group)
-      - [Table S3 The selectivity of each compound at pH 5 based on the electron and carbon](#table-s3-the-selectivity-of-each-compound-at-ph-5-based-on-the-electron-and-carbon)
-      - [Table S4 The selectivity of each compound at pH 7 based on the electron and carbon](#table-s4-the-selectivity-of-each-compound-at-ph-7-based-on-the-electron-and-carbon)
-      - [Table S5 The selectivity of each compound at pH 10 based on the electron and carbon](#table-s5-the-selectivity-of-each-compound-at-ph-10-based-on-the-electron-and-carbon)
-      - [Table S6 The overall details of metagenomic assembly results](#table-s6-the-overall-details-of-metagenomic-assembly-results)
+      - [Table S1 The specificities of primary products for each group](#table-s1-the-specificities-of-primary-products-for-each-group)
+      - [Table S2 The selectivity of each compound at pH 5 based on the electron and carbon](#table-s2-the-selectivity-of-each-compound-at-ph-5-based-on-the-electron-and-carbon)
+      - [Table S3 The selectivity of each compound at pH 7 based on the electron and carbon](#table-s3-the-selectivity-of-each-compound-at-ph-7-based-on-the-electron-and-carbon)
+      - [Table S4 The selectivity of each compound at pH 10 based on the electron and carbon](#table-s4-the-selectivity-of-each-compound-at-ph-10-based-on-the-electron-and-carbon)
+      - [Table S5 The overall details of metagenomic assembly results](#table-s5-the-overall-details-of-metagenomic-assembly-results)
     + [Dataset S1 to S12](#dataset-s1-to-s12)
       - [Dataset S1 The exact Fisher test results between E5 and E10](#dataset-s1-the-exact-fisher-test-results-between-e5-and-e10)
       - [Dataset S2 The exact Fisher test results between C7 and E7](#dataset-s2-the-exact-fisher-test-results-between-c7-and-e7)
@@ -128,214 +127,7 @@ Then
 
 $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 
-#### Table S1 The average concentration of main products and their selectivity
-
-<table>
-<thead>
-  <tr>
-    <th colspan="2">Group</th>
-    <th>C5</th>
-    <th>E5</th>
-    <th>C7</th>
-    <th>E7</th>
-    <th>C10</th>
-    <th>E10</th>
-  </tr>
-</thead>
-<tbody>
-  <tr>
-    <td colspan="2">pH</td>
-    <td colspan="2">5</td>
-    <td colspan="2">7</td>
-    <td colspan="2">10</td>
-  </tr>
-  <tr>
-    <td colspan="2">Ethanol residue</td>
-    <td>0</td>
-    <td>3,724.86 ± 853.10</td>
-    <td>0</td>
-    <td>0</td>
-    <td>0</td>
-    <td>3,278.05 ± 1424.08</td>
-  </tr>
-  <tr>
-    <td rowspan="4">SCCAs</td>
-    <td>C2</td>
-    <td>816.25 ± 188.26</td>
-    <td>132.81 ± 93.31</td>
-    <td>1,454.79 ± 350.86</td>
-    <td>93.08 ± 76.86</td>
-    <td>1,315.15 ± 184.06</td>
-    <td>6,223.06 ± 772.89</td>
-  </tr>
-  <tr>
-    <td>C3</td>
-    <td>171.99 ± 43.56</td>
-    <td>0</td>
-    <td>567.36 ± 126.69</td>
-    <td>447.20 ± 123.98</td>
-    <td>232.36 ± 50.01</td>
-    <td>209.97 ± 54.00</td>
-  </tr>
-  <tr>
-    <td>C4</td>
-    <td>472.61 ± 123.16</td>
-    <td>4,380.34 ± 342.23</td>
-    <td>376.57 ± 93.76</td>
-    <td>6,974.01 ± 731.25</td>
-    <td>454.08 ± 141.81</td>
-    <td>284.62 ± 98.68</td>
-  </tr>
-  <tr>
-    <td>C5</td>
-    <td>310.25 ± 95.41</td>
-    <td>288.54 ± 92.96</td>
-    <td>314.87 ± 107.88</td>
-    <td>769.97 ± 133.86</td>
-    <td>360.20 ± 114.84</td>
-    <td>353.58 ± 132.94</td>
-  </tr>
-  <tr>
-    <td rowspan="3">MCCAs</td>
-    <td>C6</td>
-    <td>94.03 ± 37.90</td>
-    <td>1,034.78 ± 171.134</td>
-    <td>110.92 ± 48.40</td>
-    <td>7,416.55 ± 859.24</td>
-    <td>43.76 ± 21.17</td>
-    <td>42.57 ± 18.14</td>
-  </tr>
-  <tr>
-    <td>C7</td>
-    <td>0</td>
-    <td>0</td>
-    <td>0</td>
-    <td>16.02 ± 6.34</td>
-    <td>0</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td>C8</td>
-    <td>0</td>
-    <td>0</td>
-    <td>0</td>
-    <td>42.06 ± 23.33</td>
-    <td>0</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td rowspan="4">Alcohols</td>
-    <td>C3</td>
-    <td>0</td>
-    <td>487.69 ± 197.58</td>
-    <td>0</td>
-    <td>453.95 ± 79.41</td>
-    <td>0</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td>C4</td>
-    <td>0</td>
-    <td>2,214.33 ± 251.28</td>
-    <td>0</td>
-    <td>599.44 ± 81.51</td>
-    <td>0</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td>C5</td>
-    <td>0</td>
-    <td>26.19 ± 13.17</td>
-    <td>0</td>
-    <td>31.33 ± 4.65</td>
-    <td>0</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td>C6</td>
-    <td>0</td>
-    <td>84.10 ± 46.23</td>
-    <td>0</td>
-    <td>172.49 ± 33.70</td>
-    <td>0</td>
-    <td>0</td>
-  </tr>
-  <tr>
-    <td colspan="2">Caproate selectivity&nbsp;</td>
-    <td>-</td>
-    <td>6.78%/ 7.42%</td>
-    <td>-</td>
-    <td>40.13%/ 43.44%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Heptanoate selectivity&nbsp;</td>
-    <td>-</td>
-    <td>-</td>
-    <td>-</td>
-    <td>0.09%/ 0.09%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Caprylate selectivity&nbsp;</td>
-    <td>-</td>
-    <td>-</td>
-    <td>-</td>
-    <td>0.23%/ 0.24%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Butanol selectivity</td>
-    <td>-</td>
-    <td>16.01%/ 15.57%</td>
-    <td>-</td>
-    <td>3.30%/ 3.18%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Hexanol selectivity</td>
-    <td>-</td>
-    <td>0.61%/ 0.59%</td>
-    <td>-</td>
-    <td>0.95%/ 0.91%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Ethanol use for elongation of fatty acids through the RBO</td>
-    <td>-</td>
-    <td>23.47%</td>
-    <td>-</td>
-    <td>59.27%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Ethanol use for alcohol production</td>
-    <td>-</td>
-    <td>22.99%</td>
-    <td>-</td>
-    <td>6.72%</td>
-    <td>-</td>
-    <td>-</td>
-  </tr>
-  <tr>
-    <td colspan="2">Other unedified Ethanal oxidation</td>
-    <td>-</td>
-    <td>30.32%</td>
-    <td>-</td>
-    <td>1.02%</td>
-    <td>-</td>
-    <td>100%</td>
-  </tr>
-</tbody>
-</table>
-
-#### Table S2 The specificities of primary products for each group
+#### Table S1 The specificities of primary products for each group
 
 <table>
 <thead>
@@ -461,7 +253,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Table S3 The selectivity of each compound at pH 5 based on the electron and carbon
+#### Table S2 The selectivity of each compound at pH 5 based on the electron and carbon
 
 <table>
 <thead>
@@ -606,7 +398,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Table S4 The selectivity of each compound at pH 7 based on the electron and carbon
+#### Table S3 The selectivity of each compound at pH 7 based on the electron and carbon
 
 <table>
 <thead>
@@ -751,7 +543,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Table S5 The selectivity of each compound at pH 10 based on the electron and carbon
+#### Table S4 The selectivity of each compound at pH 10 based on the electron and carbon
 
 <table>
 <thead>
@@ -896,7 +688,7 @@ $$[\text{HA}]=\frac{[\text{A}^-][\text{H}^+]}{10^{\text{p}K_a}}$$
 </tbody>
 </table>
 
-#### Table S6 The overall details of metagenomic assembly results
+#### Table S5 The overall details of metagenomic assembly results
 
 <table>
 <thead>
