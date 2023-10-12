@@ -4,10 +4,10 @@ This repository contains a collection of code, scripts and supporting informatio
 
 The supporting information includes some additional calculation procedures and tables.
 
-The MS file is here - ([Supplementary Information.docx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Information.docx))
-
-                    - ([Supplementary Dataset.xlsx]([https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx]
-		                        
+The MS files are here：
+- ([Supplementary Information.docx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Information.docx))
+- ([Supplementary Dataset.xlsx](https://github.com/XingdongShi/Biosynthesis-mechanisms-of-medium-chain-carboxylic-acids-and-alcohols-production-under-different-pH/blob/main/Supplementary%20Dataset.xlsx))
+			                        
 The markdown file is shown as follows.
                     
 ## Table of content
