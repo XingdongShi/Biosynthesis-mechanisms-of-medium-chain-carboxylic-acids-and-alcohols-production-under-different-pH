@@ -1,6 +1,6 @@
-![](https://img.shields.io/badge/DOI-xxx-violet)
+[![](https://img.shields.io/badge/DOI-10.1128%2Faem.01250--23-violet)](https://doi.org/10.1128/aem.01250-23)
 # Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions
-This repository contains a collection of code, scripts and supporting information that are used or mentioned in the paper "Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions" by Shi et al..
+This repository contains a collection of code, scripts and supporting information that are used or mentioned in the paper **"Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions"** by **Shi et al.**(https://doi.org/10.1128/aem.01250-23).
 
 The supporting information includes some additional calculation procedures and tables.
 
@@ -5100,7 +5100,7 @@ conda deactivate
 
 
 ## Copyright
-Xingdong Shi 
+**Xingdong Shi**
 
 xingdong.shi@student.uts.edu.au
 
@@ -5110,8 +5110,8 @@ The Centre for Technology in Water and Wastewater
 
 School of Environmental Engineering, University of Technology Sydney
 
-This repository is part of "Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions". Please cite the following research if this repository is helpful in your research.
+This repository is part of **"Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions"**. Please cite the following research if this repository is helpful in your research.
 
-Shi, X., Wei, W., Lan, W., et al. Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions. Applied and Environmental Microbiology.
+**Shi, X., Wei, W., Lan, W., et al. Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions. Applied and Environmental Microbiology** (https://doi.org/10.1128/aem.01250-23)
 
 
