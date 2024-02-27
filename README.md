@@ -5112,6 +5112,6 @@ School of Environmental Engineering, University of Technology Sydney
 
 This repository is part of **"Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions"**. Please cite the following research if this repository is helpful in your research.
 
-**Shi, X., Wei, W., Lan, W., et al. Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions. Applied and Environmental Microbiology** (https://doi.org/10.1128/aem.01250-23)
+**Shi X; Wei W; Wu L; Huang Y; Ni BJ, 2024, Biosynthesis mechanisms of medium-chain carboxylic acids and alcohols in anaerobic microalgae fermentation regulated by pH conditions, Applied and environmental microbiology, 90, e0125023** (https://doi.org/10.1128/aem.01250-23)
 
 
